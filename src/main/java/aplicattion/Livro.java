@@ -8,7 +8,7 @@ public class Livro {
     private int isbn;
     private int id;
     private String estado;
-    private Usuarios usuario;
+    private Usuario usuario;
 
     public Livro(String titulo, String autor){
         this.titulo = titulo;
@@ -18,11 +18,11 @@ public class Livro {
         this.id = ++contador;
     }
 
-    public Usuarios getUsuario() {
+    public Usuario getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(Usuarios usuario) {
+    public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
 

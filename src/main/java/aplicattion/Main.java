@@ -154,10 +154,36 @@ public class Main {
     }
 
     public static void listarLivros(){
-        biblioteca.listarLivros();
+        biblioteca.listar();
     }
 
-    public static void cadastrarUsuario(){
+    public static void cadastrarUsuario() throws OpcaoInvalida {
+        System.out.println("-------------------------------------------------");
+        System.out.print("Digite o nome do usuário: ");
+        String nome = scan.nextLine();
+        int idade;
+        try{
+            System.out.println("Digite a idade do usuário: ");
+            idade = scan.nextInt();
+            scan.nextLine();
+            if(idade < 18){
+                throw new OpcaoInvalida("O usuário não tem uma idade permitida!");
+            }
+        } catch (OpcaoInvalida e){
+            System.out.println(e.getMessage());
+            return;
+        }
 
+        System.out.print("Digite o tipo do usuário(1 para cliente e 2 para admin): ");
+        int numTipo = scan.nextInt();
+
+        switch (numTipo){
+            case 1:
+                Usuario user = new Usuario();
+                user.setNome(nome);
+                user.setIdade(idade);
+                user.setTipo("Cliente");
+                biblioteca.adicionarUsuario(user);
+        }
     }
 }

@@ -5,25 +5,26 @@ Você desenvolverá um sistema para gerenciar uma biblioteca. O sistema permitir
 Funcionalidades Requeridas:
 
 Catálogo de Livros:
-Adicionar, remover e listar livros no catálogo.
-Cada livro terá: Título, Autor, ISBN, e Estado (Disponível/Emprestado).
+-Adicionar, remover e listar livros no catálogo.
+-Cada livro terá: Título, Autor, ISBN, e Estado (Disponível/Emprestado).
 
 Gestão de Usuários:
 Cadastrar usuários com nome e número de identificação.
 Listar todos os usuários registrados.
-Empréstimo de Livros:
 
+Empréstimo de Livros:
 Um usuário pode emprestar um livro, desde que ele esteja disponível.
 Registrar a data do empréstimo.
 Atualizar o estado do livro para "Emprestado".
+
 Devolução de Livros:
-
 Registrar a devolução de um livro e atualizar o estado para "Disponível".
-Tratamento de Exceções:
 
+Tratamento de Exceções:
 Não permitir emprestar um livro já emprestado (lançar uma exceção).
 Lançar exceção ao tentar registrar um usuário ou livro duplicado.
 Capturar e tratar erros de entrada de dados inválidos.
+
 Requisitos Técnicos:
 Use classes e objetos para estruturar o sistema.
 Aplique encapsulamento com getters e setters.
@@ -35,3 +36,4 @@ Implemente exceções personalizadas para cenários específicos, como "Livro N�
 Extras (Opcional):
 Implemente um sistema simples de busca por livros usando o título ou ISBN.
 Salve os dados em arquivos para que sejam recuperados ao reiniciar o programa.
+
