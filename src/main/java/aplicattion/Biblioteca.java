@@ -47,8 +47,8 @@ public class Biblioteca implements Listagem {
         System.out.println("Livro removido com sucesso!");
     }
 
-    public void adicionarUsuario(Usuario user){
-        usuarios.add(user);
+    public void adicionarUsuario(Pessoa pessoa){
+        usuarios.add(pessoa);
     }
 
     public boolean localizarUsuario(String nome){

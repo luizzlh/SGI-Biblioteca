@@ -15,7 +15,7 @@ public class Main {
             System.out.println("-------------------------------------------------");
             System.out.println("|O que deseja fazer?");
             System.out.println("|1 - Gerir livros.");
-            System.out.println("|2 - Cadastrar usuários.");
+            System.out.println("|2 - Gerir usuários.");
             System.out.println("|3 - Sair");
             System.out.print("|Digite uma opção: ");
 
@@ -28,7 +28,7 @@ public class Main {
                         break;
                     case 2:
                         opcao = 2;
-                        cadastrarUsuario();
+                        gerirUsuarios();
                         break;
                     case 3:
                         opcao = 3;
@@ -157,6 +157,28 @@ public class Main {
         biblioteca.listar();
     }
 
+    public static void gerirUsuarios() throws OpcaoInvalida {
+        System.out.println("-------------------------------------------------");
+        System.out.println("|O que deseja fazer?");
+        System.out.println("|1 - Cadastrar usuário");
+        System.out.println("|2 - Remover usuário");
+        System.out.println("|3 - Sair");
+        int opcao = scan.nextInt();
+
+        switch (opcao){
+            case 1:
+                cadastrarUsuario();
+                break;
+            case 2:
+                removerUsuario();
+                break;
+            case 3:
+                break;
+            default:
+                throw new OpcaoInvalida("Opção inválida!");
+        }
+    }
+
     public static void cadastrarUsuario() throws OpcaoInvalida {
         System.out.println("-------------------------------------------------");
         System.out.print("Digite o nome do usuário: ");
@@ -184,6 +206,20 @@ public class Main {
                 user.setIdade(idade);
                 user.setTipo("Cliente");
                 biblioteca.adicionarUsuario(user);
+                break;
+            case 2:
+                Administrador admin = new Administrador();
+                admin.setNome(nome);
+                admin.setIdade(idade);
+                admin.setTipo("Admin");
+                biblioteca.adicionarUsuario(admin);
+                break;
+            default:
+                throw new OpcaoInvalida("Selecione uma opção válida(1 para Cliente ou 2 para Admin)!");
         }
+    }
+
+    public static void removerUsuario(){
+
     }
 }
