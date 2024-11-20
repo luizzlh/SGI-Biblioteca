@@ -34,4 +34,13 @@ public abstract class Pessoa {
     public void setIdade(int idade) {
         this.idade = idade;
     }
+
+    @Override
+    public String toString() {
+        return "Pessoa{" + '\n' +
+                "   Nome: " + getNome() + '\n' +
+                "   Idade: " + getIdade() + '\n' +
+                "   Tipo: " + tipo + '\n' +
+                '}';
+    }
 }

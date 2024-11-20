@@ -1,6 +1,6 @@
 package aplicattion;
 import exceptions.LivroExistente;
-import exceptions.LivroInexistente;
+import exceptions.ItemInexistente;
 import exceptions.OpcaoInvalida;
 
 import java.util.InputMismatchException;
@@ -143,10 +143,10 @@ public class Main {
         System.out.print("Digite o ID do livro a ser removido: ");
         int id = scan.nextInt();
         try{
-            if(!biblioteca.validarIdRemocao(id)){
-                throw new LivroInexistente("Este livro não existe!");
+            if(!biblioteca.validarIdRemocaoLivro(id)){
+                throw new ItemInexistente("Este livro não existe!");
             }
-        } catch (LivroInexistente e) {
+        } catch (ItemInexistente e) {
             System.out.println();
             System.out.println(e.getMessage());
         }
@@ -162,7 +162,9 @@ public class Main {
         System.out.println("|O que deseja fazer?");
         System.out.println("|1 - Cadastrar usuário");
         System.out.println("|2 - Remover usuário");
-        System.out.println("|3 - Sair");
+        System.out.println("|3 - Listar usuários");
+        System.out.println("|4 - Sair");
+        System.out.print("|Digite sua opção:");
         int opcao = scan.nextInt();
 
         switch (opcao){
@@ -173,6 +175,8 @@ public class Main {
                 removerUsuario();
                 break;
             case 3:
+                listarUsuarios();
+            case 4:
                 break;
             default:
                 throw new OpcaoInvalida("Opção inválida!");
@@ -182,10 +186,11 @@ public class Main {
     public static void cadastrarUsuario() throws OpcaoInvalida {
         System.out.println("-------------------------------------------------");
         System.out.print("Digite o nome do usuário: ");
-        String nome = scan.nextLine();
+        String nome = scan.next();
+        scan.nextLine();
         int idade;
         try{
-            System.out.println("Digite a idade do usuário: ");
+            System.out.print("Digite a idade do usuário: ");
             idade = scan.nextInt();
             scan.nextLine();
             if(idade < 18){
@@ -220,6 +225,22 @@ public class Main {
     }
 
     public static void removerUsuario(){
+        System.out.println("-------------------------------------------------");
+        System.out.print("Digite o nome do usuário a ser removido: ");
+        String nome = scan.nextLine();
+        scan.nextLine();
+        try{
+            if(!biblioteca.validarIdRemocaoUsuario(nome)){
+                throw new ItemInexistente("Este usuário não existe!");
+            }
+        } catch (ItemInexistente e) {
+            System.out.println();
+            System.out.println(e.getMessage());
+        }
+        biblioteca.removerUsuario(nome);
+    }
 
+    public static void listarUsuarios(){
+        biblioteca.listarUsuarios();
     }
 }

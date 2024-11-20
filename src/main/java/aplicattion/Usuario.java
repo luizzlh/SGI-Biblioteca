@@ -5,6 +5,7 @@ public class Usuario extends Pessoa{
     private int id;
     private int idade;
     private String tipo;
+    private String nome;
 
     public Usuario(){
 //        super(nome, tipo, idade);
@@ -25,6 +26,7 @@ public class Usuario extends Pessoa{
 
     public void setNome(String nome){
         super.setNome(nome);
+        this.nome = nome;
     }
 
     public String getTipo(){

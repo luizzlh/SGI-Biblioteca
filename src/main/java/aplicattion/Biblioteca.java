@@ -29,7 +29,7 @@ public class Biblioteca implements Listagem {
         }
     }
 
-    public boolean validarIdRemocao(int id){
+    public boolean validarIdRemocaoLivro(int id){
         for(Livro livro: livros){
             if(livro.getId() == id){
                 return true;
@@ -49,6 +49,7 @@ public class Biblioteca implements Listagem {
 
     public void adicionarUsuario(Pessoa pessoa){
         usuarios.add(pessoa);
+        System.out.println("Usuário cadastrado com sucesso!");
     }
 
     public boolean localizarUsuario(String nome){
@@ -62,9 +63,28 @@ public class Biblioteca implements Listagem {
 
     public void listarUsuarios(){
         System.out.println();
-        System.out.println("Atualmente existem " + usuarios.size() + " usuários na biblioteca: ");
+        System.out.println("Atualmente existe " + usuarios.size() + " usuário(s) na biblioteca: ");
         for(Pessoa user: usuarios){
             System.out.println(user);
+        }
+    }
+
+    public boolean validarIdRemocaoUsuario(String nome){
+        for(Pessoa user: usuarios){
+            if(user.getNome().equalsIgnoreCase(nome)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void removerUsuario(String nome){
+        for(Pessoa user: usuarios){
+            if(user.getNome().equalsIgnoreCase(nome)){
+                int index = usuarios.indexOf(user);
+                usuarios.remove(index);
+                System.out.println("Usuário " + user.getNome() + " removido com sucesso!");
+            }
         }
     }
 }
