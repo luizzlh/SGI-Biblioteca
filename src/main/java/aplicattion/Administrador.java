@@ -39,6 +39,6 @@ public class Administrador extends Pessoa{
     }
 
     public void setIdade(int idade){
-
+        this.idade = idade;
     }
 }

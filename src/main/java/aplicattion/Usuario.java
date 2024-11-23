@@ -10,6 +10,7 @@ public class Usuario extends Pessoa{
     public Usuario(){
 //        super(nome, tipo, idade);
         this.id = ++identificador;
+
     }
 
     public int getId() {

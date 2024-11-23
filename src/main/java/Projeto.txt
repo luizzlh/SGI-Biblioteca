@@ -9,7 +9,7 @@ Catálogo de Livros:
 -Cada livro terá: Título, Autor, ISBN, e Estado (Disponível/Emprestado).
 
 Gestão de Usuários:
-Cadastrar usuários com nome e número de identificação.
+-Cadastrar usuários com nome e número de identificação.
 Listar todos os usuários registrados.
 
 Empréstimo de Livros:

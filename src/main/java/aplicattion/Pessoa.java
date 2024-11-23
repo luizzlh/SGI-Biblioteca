@@ -4,6 +4,8 @@ public abstract class Pessoa {
     private String nome;
     private String tipo;
     private int idade;
+    private static int identificador = 1000;
+    private int id;
 
     public Pessoa(){
 //        this.nome = nome;
@@ -35,12 +37,17 @@ public abstract class Pessoa {
         this.idade = idade;
     }
 
+    public int getId(){
+        return this.id;
+    }
+
     @Override
     public String toString() {
         return "Pessoa{" + '\n' +
                 "   Nome: " + getNome() + '\n' +
                 "   Idade: " + getIdade() + '\n' +
-                "   Tipo: " + tipo + '\n' +
+                "   Tipo: " + getTipo() + '\n' +
+                "   ID: " + getId() + '\n' +
                 '}';
     }
 }
