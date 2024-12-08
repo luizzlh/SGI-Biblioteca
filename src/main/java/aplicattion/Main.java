@@ -154,7 +154,7 @@ public class Main {
     }
 
     public static void listarLivros(){
-        biblioteca.listar();
+        biblioteca.listarTodosLivros();
     }
 
     public static void gerirUsuarios() throws OpcaoInvalida {
@@ -163,9 +163,11 @@ public class Main {
         System.out.println("|1 - Cadastrar usuário");
         System.out.println("|2 - Remover usuário");
         System.out.println("|3 - Listar usuários");
-        System.out.println("|4 - Sair");
+        System.out.println("|4 - Emprestar livro");
+        System.out.println("|5 - Sair");
         System.out.print("|Digite sua opção:");
         int opcao = scan.nextInt();
+        scan.nextLine();
 
         switch (opcao){
             case 1:
@@ -176,7 +178,11 @@ public class Main {
                 break;
             case 3:
                 listarUsuarios();
+                break;
             case 4:
+                emprestarLivro();
+                break;
+            case 5:
                 break;
             default:
                 throw new OpcaoInvalida("Opção inválida!");
@@ -186,13 +192,11 @@ public class Main {
     public static void cadastrarUsuario() throws OpcaoInvalida {
         System.out.println("-------------------------------------------------");
         System.out.print("Digite o nome do usuário: ");
-        String nome = scan.next();
-        scan.nextLine();
+        String nome = scan.nextLine();
         int idade;
         try{
             System.out.print("Digite a idade do usuário: ");
             idade = scan.nextInt();
-            scan.nextLine();
             if(idade < 18){
                 throw new OpcaoInvalida("O usuário não tem uma idade permitida!");
             }
@@ -226,7 +230,7 @@ public class Main {
 
     public static void removerUsuario(){
         System.out.println("-------------------------------------------------");
-        System.out.print("Digite o nome do usuário a ser removido: ");
+        System.out.print("|Digite o nome do usuário a ser removido: ");
         String nome = scan.nextLine();
         scan.nextLine();
         try{
@@ -242,5 +246,14 @@ public class Main {
 
     public static void listarUsuarios(){
         biblioteca.listarUsuarios();
+    }
+
+    private static void emprestarLivro() {
+        System.out.println("-------------------------------------------------");
+        System.out.println("|Livros disponíveis para empréstimo: ");
+        biblioteca.listarLivrosDisponiveis();
+        System.out.println();
+        System.out.println("|Digite o livro que você deseja: ");
+        String nomeLivro = scan.nextLine();
     }
 }

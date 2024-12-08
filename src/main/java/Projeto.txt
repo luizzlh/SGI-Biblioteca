@@ -10,7 +10,7 @@ Catálogo de Livros:
 
 Gestão de Usuários:
 -Cadastrar usuários com nome e número de identificação.
-Listar todos os usuários registrados.
+-Listar todos os usuários registrados.
 
 Empréstimo de Livros:
 Um usuário pode emprestar um livro, desde que ele esteja disponível.
@@ -22,8 +22,8 @@ Registrar a devolução de um livro e atualizar o estado para "Disponível".
 
 Tratamento de Exceções:
 Não permitir emprestar um livro já emprestado (lançar uma exceção).
-Lançar exceção ao tentar registrar um usuário ou livro duplicado.
-Capturar e tratar erros de entrada de dados inválidos.
+-Lançar exceção ao tentar registrar um usuário ou livro duplicado.
+-Capturar e tratar erros de entrada de dados inválidos.
 
 Requisitos Técnicos:
 Use classes e objetos para estruturar o sistema.

@@ -21,11 +21,20 @@ public class Biblioteca implements Listagem {
         return false;
     }
 
-    public void listar(){
+    public void listarTodosLivros(){
         System.out.println();
         System.out.println("Atualmente existem " + livros.size() + " livros na biblioteca: ");
         for(Livro livro: livros){
             System.out.println(livro);
+        }
+    }
+
+    public void listarLivrosDisponiveis(){
+        System.out.println();
+        for(Livro livro: livros){
+            if(livro.getEstado().equalsIgnoreCase("Disponível")){
+                System.out.println(livro.getEstado());
+            }
         }
     }
 
@@ -87,37 +96,9 @@ public class Biblioteca implements Listagem {
             }
         }
     }
-}
 
-//{
-//    usuarios{
-//        luiz{
-//            nome: "Luiz",
-//            idade: 20,
-//                tipo: cliente,
-//            livro{
-//
-//            }
-//        }
-//        vinicius{
-//            nome:"Vinícius",
-//            idade: 20,
-//                tipo: admin,
-//            livro{
-//
-//            }
-//        }
-//    }
-//    livros{
-//        livro1{
-//            nome: "Código Limpo",
-//            autor: "Robert C. Martin",
-//            isbn: 10001,
-//            id: 01
-//        }
-//        livro2{
-//
-//        }
-//    }
-//
-//}
+    @Override
+    public void listar() {
+
+    }
+}
