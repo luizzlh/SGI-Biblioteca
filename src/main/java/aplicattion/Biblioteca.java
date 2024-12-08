@@ -5,15 +5,16 @@ import java.util.ArrayList;
 public class Biblioteca implements Listagem {
     private Livro livro;
     private ArrayList<ArrayList<ArrayList<Object>>> biblioteca = new ArrayList<>();
-    private ArrayList<Livro> livros = new ArrayList<>();
+    private ArrayList<Livro> listaGeralLivros = new ArrayList<>();
+    protected ArrayList<Livro> livrosDisponiveis = new ArrayList<>();
     private ArrayList<Pessoa> usuarios = new ArrayList<>();
 
     public void adicionarLivro(Livro livro){
-        livros.add(livro);
+        listaGeralLivros.add(livro);
     }
 
     public boolean localizarLivro(String nome){
-        for(Livro livro: livros){
+        for(Livro livro: listaGeralLivros){
             if(livro.getTitulo().equalsIgnoreCase(nome)){
                 return true;
             }
@@ -23,23 +24,27 @@ public class Biblioteca implements Listagem {
 
     public void listarTodosLivros(){
         System.out.println();
-        System.out.println("Atualmente existem " + livros.size() + " livros na biblioteca: ");
-        for(Livro livro: livros){
+        System.out.println("Atualmente existem " + listaGeralLivros.size() + " livros na biblioteca: ");
+        for(Livro livro: listaGeralLivros){
             System.out.println(livro);
         }
     }
 
-    public void listarLivrosDisponiveis(){
-        System.out.println();
-        for(Livro livro: livros){
+    public boolean validaLivrosDisponiveis(){
+        for(Livro livro: listaGeralLivros){
             if(livro.getEstado().equalsIgnoreCase("Disponível")){
-                System.out.println(livro.getEstado());
+                livrosDisponiveis.add(livro);
             }
         }
+
+        if(listaGeralLivros.isEmpty()){
+            return true;
+        }
+        return false;
     }
 
     public boolean validarIdRemocaoLivro(int id){
-        for(Livro livro: livros){
+        for(Livro livro: listaGeralLivros){
             if(livro.getId() == id){
                 return true;
             }
@@ -49,10 +54,10 @@ public class Biblioteca implements Listagem {
 
     public void removerLivro(int id){
         id -= 1;
-        Livro livro = livros.get(id);
+        Livro livro = listaGeralLivros.get(id);
         String titulo = livro.getTitulo();
         System.out.println("Livro a ser removido: " + titulo);
-        livros.remove(id);
+        listaGeralLivros.remove(id);
         System.out.println("Livro removido com sucesso!");
     }
 

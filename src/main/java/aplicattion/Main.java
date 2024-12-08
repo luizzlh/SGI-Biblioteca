@@ -51,7 +51,8 @@ public class Main {
             System.out.println("|1 - Adicionar livro");
             System.out.println("|2 - Remover livro");
             System.out.println("|3 - Ver livros");
-            System.out.println("|4 - Sair");
+            System.out.println("|4 - Emprestar livro");
+            System.out.println("|5 - Sair");
             System.out.print("|Digite sua escolha: ");
 
             int escolha = scan.nextInt();
@@ -72,6 +73,10 @@ public class Main {
                         break;
                     case 4:
                         opcao = 4;
+                        emprestarLivro();
+                        break;
+                    case 5:
+                        opcao = 5;
                         break;
                     default:
                         throw new OpcaoInvalida("Opção escolhida é inválida!");
@@ -163,8 +168,7 @@ public class Main {
         System.out.println("|1 - Cadastrar usuário");
         System.out.println("|2 - Remover usuário");
         System.out.println("|3 - Listar usuários");
-        System.out.println("|4 - Emprestar livro");
-        System.out.println("|5 - Sair");
+        System.out.println("|4 - Sair");
         System.out.print("|Digite sua opção:");
         int opcao = scan.nextInt();
         scan.nextLine();
@@ -180,9 +184,6 @@ public class Main {
                 listarUsuarios();
                 break;
             case 4:
-                emprestarLivro();
-                break;
-            case 5:
                 break;
             default:
                 throw new OpcaoInvalida("Opção inválida!");
@@ -248,12 +249,29 @@ public class Main {
         biblioteca.listarUsuarios();
     }
 
-    private static void emprestarLivro() {
+    public static void listarLivrosDisponiveis(){
+        int qtdLivrosDisponiveis =  biblioteca.livrosDisponiveis.size();
+
+        if(qtdLivrosDisponiveis > 0){
+            System.out.println("Atualmente existem " + qtdLivrosDisponiveis + " livros disponiveis: ");
+            for(Livro livro: biblioteca.livrosDisponiveis){
+                System.out.println(livro);
+            }
+            biblioteca.livrosDisponiveis.clear();
+        } else{
+            System.out.println("Não há livros disponíveis para empréstimo!");
+        }
+    }
+
+    public static void emprestarLivro() {
         System.out.println("-------------------------------------------------");
-        System.out.println("|Livros disponíveis para empréstimo: ");
-        biblioteca.listarLivrosDisponiveis();
-        System.out.println();
-        System.out.println("|Digite o livro que você deseja: ");
-        String nomeLivro = scan.nextLine();
+        if(!biblioteca.validaLivrosDisponiveis()){
+            listarLivrosDisponiveis();
+            System.out.println();
+            System.out.println("|Digite o ID do livro que você deseja: ");
+            int nomeLivro = scan.nextInt();
+        } else{
+            System.out.println("Não há livros disponíveis para empréstimo!");
+        }
     }
 }
