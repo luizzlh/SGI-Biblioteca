@@ -2,6 +2,7 @@ package aplicattion;
 import exceptions.LivroExistente;
 import exceptions.ItemInexistente;
 import exceptions.OpcaoInvalida;
+import mongodb.IniciaConexao;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -9,7 +10,9 @@ import java.util.Scanner;
 public class Main {
     static Biblioteca biblioteca = new Biblioteca();
     static Scanner scan = new Scanner(System.in);
+    static IniciaConexao connectDB = new IniciaConexao();
     public static void main(String[] args) throws OpcaoInvalida {
+        connectDB.iniciaConexao();
         int opcao = 1;
         while(opcao != 3){
             System.out.println("-------------------------------------------------");
@@ -77,7 +80,7 @@ public class Main {
                         break;
                     case 5:
                         opcao = 5;
-                        break;
+                        return;
                     default:
                         throw new OpcaoInvalida("Opção escolhida é inválida!");
                 }
@@ -125,12 +128,6 @@ public class Main {
             String autor = scan.nextLine();
             biblioteca.adicionarLivro(new Livro(titulo, autor));
             contador++;
-        }
-
-        if (contador == 1) {
-            System.out.println("Livro adicionado com sucesso!");
-        } else {
-            System.out.println("Livros adicionados com sucesso!");
         }
     }
 
@@ -263,15 +260,28 @@ public class Main {
         }
     }
 
-    public static void emprestarLivro() {
+    public static void emprestarLivro() throws OpcaoInvalida {
         System.out.println("-------------------------------------------------");
         if(!biblioteca.validaLivrosDisponiveis()){
             listarLivrosDisponiveis();
             System.out.println();
-            System.out.println("|Digite o ID do livro que você deseja: ");
-            int nomeLivro = scan.nextInt();
+            System.out.print("|Digite o ID do livro que você deseja: ");
+            int idLivro = scan.nextInt();
+            try{
+                if(biblioteca.validaIdLivroDisponivel(idLivro)){
+                    biblioteca.mudaEstadoLivroParaEmprestado(idLivro);
+                } else{
+                    throw new OpcaoInvalida("Este livro não existe ou não está disponível!");
+                }
+            }catch (OpcaoInvalida e){
+                System.out.println(e.getMessage());
+            }
         } else{
             System.out.println("Não há livros disponíveis para empréstimo!");
         }
+    }
+
+    public static void devolverLivro() throws OpcaoInvalida{
+        
     }
 }

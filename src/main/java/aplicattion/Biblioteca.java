@@ -1,5 +1,8 @@
 package aplicattion;
 import interfaces.Listagem;
+import mongodb.InsereLivrosBiblioteca;
+import mongodb.LocalizaLivro;
+
 import java.util.ArrayList;
 
 public class Biblioteca implements Listagem {
@@ -8,16 +11,17 @@ public class Biblioteca implements Listagem {
     private ArrayList<Livro> listaGeralLivros = new ArrayList<>();
     protected ArrayList<Livro> livrosDisponiveis = new ArrayList<>();
     private ArrayList<Pessoa> usuarios = new ArrayList<>();
+    private InsereLivrosBiblioteca insereLivrosBiblioteca = new InsereLivrosBiblioteca();
+    private LocalizaLivro validaNome = new LocalizaLivro();
+
 
     public void adicionarLivro(Livro livro){
-        listaGeralLivros.add(livro);
+        insereLivrosBiblioteca.insereLivro(livro);
     }
 
     public boolean localizarLivro(String nome){
-        for(Livro livro: listaGeralLivros){
-            if(livro.getTitulo().equalsIgnoreCase(nome)){
-                return true;
-            }
+        if(validaNome.localizaLivro(nome)){
+            return true;
         }
         return false;
     }
@@ -41,6 +45,33 @@ public class Biblioteca implements Listagem {
             return true;
         }
         return false;
+    }
+
+    public boolean validaIdLivroDisponivel(int id){
+        for(Livro livro: livrosDisponiveis){
+            if(livro.getId() == id){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void mudaEstadoLivroParaEmprestado(int id){
+        for(Livro livro: livrosDisponiveis){
+            if(livro.getId() == id){
+                livro.setEstado("Emprestado");
+                livrosDisponiveis.remove(livro);
+            }
+        }
+    }
+
+    public void mudaEstadoLivroParaDisponivel(int id){
+        for(Livro livro: listaGeralLivros){
+            if(livro.getId() == id){
+                livro.setEstado("Disponível");
+                livrosDisponiveis.add(livro);
+            }
+        }
     }
 
     public boolean validarIdRemocaoLivro(int id){
