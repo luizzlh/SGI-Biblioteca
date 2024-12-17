@@ -1,7 +1,7 @@
 package aplicattion;
+import exceptions.ItemInexistente;
 import interfaces.Listagem;
-import mongodb.InsereLivrosBiblioteca;
-import mongodb.LocalizaLivro;
+import mongodb.*;
 
 import java.util.ArrayList;
 
@@ -13,7 +13,15 @@ public class Biblioteca implements Listagem {
     private ArrayList<Pessoa> usuarios = new ArrayList<>();
     private InsereLivrosBiblioteca insereLivrosBiblioteca = new InsereLivrosBiblioteca();
     private LocalizaLivro validaNome = new LocalizaLivro();
+    private int idUsuarioLogado = 0;
 
+    public void adicionaUsuarioLogado(int id){
+        idUsuarioLogado = id;
+    }
+
+    public void removeUsuarioLogado(){
+        idUsuarioLogado = 0;
+    }
 
     public void adicionarLivro(Livro livro){
         insereLivrosBiblioteca.insereLivro(livro);
@@ -28,10 +36,11 @@ public class Biblioteca implements Listagem {
 
     public void listarTodosLivros(){
         System.out.println();
-        System.out.println("Atualmente existem " + listaGeralLivros.size() + " livros na biblioteca: ");
-        for(Livro livro: listaGeralLivros){
-            System.out.println(livro);
-        }
+//        System.out.println("Atualmente existem " + listaGeralLivros.size() + " livros na biblioteca: ");
+//        for(Livro livro: listaGeralLivros){
+//            System.out.println(livro);
+//        }
+        ExibirLivros.exibirLivros();
     }
 
     public boolean validaLivrosDisponiveis(){
@@ -47,53 +56,43 @@ public class Biblioteca implements Listagem {
         return false;
     }
 
-    public boolean validaIdLivroDisponivel(int id){
-        for(Livro livro: livrosDisponiveis){
-            if(livro.getId() == id){
-                return true;
-            }
-        }
-        return false;
+    public void removeLivro(int isbn){
+        RemoveLivro.removeLivro(isbn);
     }
 
-    public void mudaEstadoLivroParaEmprestado(int id){
-        for(Livro livro: livrosDisponiveis){
-            if(livro.getId() == id){
-                livro.setEstado("Emprestado");
-                livrosDisponiveis.remove(livro);
-            }
-        }
-    }
+//    public void mudaEstadoLivroParaEmprestado(int id){
+//        for(Livro livro: livrosDisponiveis){
+//            if(livro.getId() == id){
+//                livro.setEstado("Emprestado");
+//                livrosDisponiveis.remove(livro);
+//            }
+//        }
+//    }
 
-    public void mudaEstadoLivroParaDisponivel(int id){
-        for(Livro livro: listaGeralLivros){
-            if(livro.getId() == id){
-                livro.setEstado("Disponível");
-                livrosDisponiveis.add(livro);
-            }
-        }
-    }
+//    public void mudaEstadoLivroParaDisponivel(int id){
+//        for(Livro livro: listaGeralLivros){
+//            if(livro.getId() == id){
+//                livro.setEstado("Disponível");
+//                livrosDisponiveis.add(livro);
+//            }
+//        }
+//    }
 
-    public boolean validarIdRemocaoLivro(int id){
-        for(Livro livro: listaGeralLivros){
-            if(livro.getId() == id){
-                return true;
-            }
-        }
-        return false;
-    }
+//    public boolean validarIdLivroDisponivel(int id){
+//        for(Livro livro: listaGeralLivros){
+//            if(livro.getId() == id){
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
-    public void removerLivro(int id){
-        id -= 1;
-        Livro livro = listaGeralLivros.get(id);
-        String titulo = livro.getTitulo();
-        System.out.println("Livro a ser removido: " + titulo);
-        listaGeralLivros.remove(id);
-        System.out.println("Livro removido com sucesso!");
+    public void removerLivro(int isbn){
+        RemoveLivro.removeLivro(isbn);
     }
 
     public void adicionarUsuario(Pessoa pessoa){
-        usuarios.add(pessoa);
+        InsereDadosUsuario.insereDadosUsuario(pessoa);
         System.out.println("Usuário cadastrado com sucesso!");
     }
 

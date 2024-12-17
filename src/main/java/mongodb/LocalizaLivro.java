@@ -7,7 +7,7 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
 public class LocalizaLivro {
-    public boolean localizaLivro(String nome) {
+    public static boolean localizaLivro(String nome) {
         try (MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017")) {
             MongoDatabase database = mongoClient.getDatabase("catalogo");
             MongoCollection<Document> collection = database.getCollection("livros");

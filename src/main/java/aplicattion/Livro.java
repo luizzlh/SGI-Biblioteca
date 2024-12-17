@@ -7,11 +7,9 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
 public class Livro {
-    private static int contador = 0;
     private String titulo;
     private String autor;
     private int isbn;
-    private int id;
     private String estado;
     private Usuario usuario;
 
@@ -57,7 +55,6 @@ public class Livro {
         this.autor = autor;
         this.isbn = buscaIsbn();
         this.estado = "Disponível";
-        this.id = ++contador;
     }
 
     public Usuario getUsuario() {
@@ -100,22 +97,6 @@ public class Livro {
         this.titulo = titulo;
     }
 
-    public static int getContador() {
-        return contador;
-    }
-
-    public static void setContador(int contador) {
-        Livro.contador = contador;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     @Override
     public String toString() {
         return "Livro{" + '\n' +
@@ -124,7 +105,6 @@ public class Livro {
                 "   Estado: " + estado + '\n' +
                 "   Usuário: " + usuario + '\n' +
                 "   Isbn: " + this.isbn + '\n' +
-                "   Id: " + this.id + '\n' +
                 '}' + '\n';
     }
 }

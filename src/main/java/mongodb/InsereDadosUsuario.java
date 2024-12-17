@@ -6,7 +6,6 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
-
 public class InsereDadosUsuario {
     public static void insereDadosUsuario(Pessoa user) {
         try (MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017")) {
@@ -16,10 +15,9 @@ public class InsereDadosUsuario {
             Document doc = new Document("Nome", user.getNome())
                     .append("Idade", user.getIdade())
                     .append("Tipo", "Cliente")
-                    .append("ID", user.getId());
+                    .append("ID", user.getId())
+                    .append("Senha", user.getSenha());
             collection.insertOne(doc);
-
-            System.out.println("Documento inserido!");
         }
     }
 }

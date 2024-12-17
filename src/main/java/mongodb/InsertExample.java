@@ -10,10 +10,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class InsertExample {
-    public static void main(String[] args) {
-        try (MongoClient mongoClient = MongoClients.create("mongodb://biblioteca")) {
-            MongoDatabase database = mongoClient.getDatabase("usuarios");
-            MongoCollection<Document> collection = database.getCollection("usuarios");
+    public static void main() {
+        try (MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017")) {
+            MongoDatabase database = mongoClient.getDatabase("");
+            MongoCollection<Document> collection = database.getCollection("");
 
             List<String> habilidades = Arrays.asList("Java", "MongoDB");
 

@@ -6,6 +6,7 @@ public abstract class Pessoa {
     private int idade;
     private static int identificador = 1000;
     private int id;
+    private String senha;
 
     public Pessoa(){
 //        this.nome = nome;
@@ -39,6 +40,14 @@ public abstract class Pessoa {
 
     public int getId(){
         return this.id;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     @Override

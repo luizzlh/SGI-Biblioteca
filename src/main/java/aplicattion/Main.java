@@ -3,6 +3,8 @@ import exceptions.LivroExistente;
 import exceptions.ItemInexistente;
 import exceptions.OpcaoInvalida;
 import mongodb.IniciaConexao;
+import mongodb.Login;
+import mongodb.VerificaConteudoBD;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -11,8 +13,98 @@ public class Main {
     static Biblioteca biblioteca = new Biblioteca();
     static Scanner scan = new Scanner(System.in);
     static IniciaConexao connectDB = new IniciaConexao();
-    public static void main(String[] args) throws OpcaoInvalida {
+
+    public static void main(String[] args) {
         connectDB.iniciaConexao();
+        System.out.println("-------------------------------------------------");
+        System.out.println("|1 - Fazer Login");
+        System.out.println("|2 - Fazer Cadastro");
+        System.out.print("Digite sua escolha: ");
+        int escolha = scan.nextInt();
+        scan.nextLine();
+
+        try{
+            switch (escolha){
+                case 1:
+                    login();
+                    break;
+                case 2:
+                    cadastro();
+                    break;
+                default:
+                    throw new OpcaoInvalida("Digite uma opção válida!");
+
+            }
+        } catch (OpcaoInvalida ex){
+            System.out.println("-------------------------------------------------");
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    public static void login() throws OpcaoInvalida {
+        try {
+            if (!VerificaConteudoBD.verificaConteudoDB()) {
+                System.out.println("Não existem usuários no sistema! Por favor, cadastre-se.");
+                cadastro();
+                return;
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao verificar conteúdo do banco de dados: " + e.getMessage());
+            return;
+        }
+
+        System.out.println("-------------------------------------------------");
+        System.out.print("| Digite seu usuário: ");
+        String usuario = scan.nextLine();
+        System.out.print("| Digite sua senha: ");
+        String senha = scan.nextLine();
+
+        while (true) {
+            if (Login.login(usuario, senha)) {
+                System.out.println("Usuário logado com sucesso!");
+                int id = Login.retornaIdLogin(usuario, senha);
+                biblioteca.adicionaUsuarioLogado(id);
+                home();
+                return;
+            } else {
+                System.out.println("Usuário ou senha inválida! Tente novamente.");
+                System.out.print("| Digite seu usuário: ");
+                usuario = scan.nextLine();
+                System.out.print("| Digite sua senha: ");
+                senha = scan.nextLine();
+            }
+        }
+    }
+
+    public static void cadastro() throws OpcaoInvalida {
+        scan.nextLine();
+        System.out.println("-------------------------------------------------");
+        System.out.print("Digite o nome do usuário: ");
+        String nome = scan.nextLine();
+        int idade;
+        try{
+            System.out.print("Digite a idade do usuário: ");
+            idade = scan.nextInt();
+            scan.nextLine();
+            if(idade < 18){
+                throw new OpcaoInvalida("O usuário não tem uma idade permitida!");
+            }
+        } catch (OpcaoInvalida e){
+            System.out.println(e.getMessage());
+            return;
+        }
+        System.out.print("Digite sua senha: ");
+        String senha = scan.nextLine();
+
+        Usuario user = new Usuario();
+        user.setNome(nome);
+        user.setIdade(idade);
+        user.setTipo("Cliente");
+        user.setSenha(senha);
+        biblioteca.adicionarUsuario(user);
+    }
+
+    public static void home() throws OpcaoInvalida {
         int opcao = 1;
         while(opcao != 3){
             System.out.println("-------------------------------------------------");
@@ -76,7 +168,7 @@ public class Main {
                         break;
                     case 4:
                         opcao = 4;
-                        emprestarLivro();
+//                        emprestarLivro();
                         break;
                     case 5:
                         opcao = 5;
@@ -142,17 +234,9 @@ public class Main {
 
     public static void removerLivro(){
         System.out.println("-------------------------------------------------");
-        System.out.print("Digite o ID do livro a ser removido: ");
-        int id = scan.nextInt();
-        try{
-            if(!biblioteca.validarIdRemocaoLivro(id)){
-                throw new ItemInexistente("Este livro não existe!");
-            }
-        } catch (ItemInexistente e) {
-            System.out.println();
-            System.out.println(e.getMessage());
-        }
-        biblioteca.removerLivro(id);
+        System.out.print("Digite o ISBN do livro a ser removido: ");
+        int isbn = scan.nextInt();
+        biblioteca.removerLivro(isbn);
     }
 
     public static void listarLivros(){
@@ -172,7 +256,7 @@ public class Main {
 
         switch (opcao){
             case 1:
-                cadastrarUsuario();
+                cadastro();
                 break;
             case 2:
                 removerUsuario();
@@ -184,45 +268,6 @@ public class Main {
                 break;
             default:
                 throw new OpcaoInvalida("Opção inválida!");
-        }
-    }
-
-    public static void cadastrarUsuario() throws OpcaoInvalida {
-        System.out.println("-------------------------------------------------");
-        System.out.print("Digite o nome do usuário: ");
-        String nome = scan.nextLine();
-        int idade;
-        try{
-            System.out.print("Digite a idade do usuário: ");
-            idade = scan.nextInt();
-            if(idade < 18){
-                throw new OpcaoInvalida("O usuário não tem uma idade permitida!");
-            }
-        } catch (OpcaoInvalida e){
-            System.out.println(e.getMessage());
-            return;
-        }
-
-        System.out.print("Digite o tipo do usuário(1 para cliente e 2 para admin): ");
-        int numTipo = scan.nextInt();
-
-        switch (numTipo){
-            case 1:
-                Usuario user = new Usuario();
-                user.setNome(nome);
-                user.setIdade(idade);
-                user.setTipo("Cliente");
-                biblioteca.adicionarUsuario(user);
-                break;
-            case 2:
-                Administrador admin = new Administrador();
-                admin.setNome(nome);
-                admin.setIdade(idade);
-                admin.setTipo("Admin");
-                biblioteca.adicionarUsuario(admin);
-                break;
-            default:
-                throw new OpcaoInvalida("Selecione uma opção válida(1 para Cliente ou 2 para Admin)!");
         }
     }
 
@@ -260,28 +305,28 @@ public class Main {
         }
     }
 
-    public static void emprestarLivro() throws OpcaoInvalida {
-        System.out.println("-------------------------------------------------");
-        if(!biblioteca.validaLivrosDisponiveis()){
-            listarLivrosDisponiveis();
-            System.out.println();
-            System.out.print("|Digite o ID do livro que você deseja: ");
-            int idLivro = scan.nextInt();
-            try{
-                if(biblioteca.validaIdLivroDisponivel(idLivro)){
-                    biblioteca.mudaEstadoLivroParaEmprestado(idLivro);
-                } else{
-                    throw new OpcaoInvalida("Este livro não existe ou não está disponível!");
-                }
-            }catch (OpcaoInvalida e){
-                System.out.println(e.getMessage());
-            }
-        } else{
-            System.out.println("Não há livros disponíveis para empréstimo!");
-        }
-    }
+//    public static void emprestarLivro() throws OpcaoInvalida {
+//        System.out.println("-------------------------------------------------");
+//        if(!biblioteca.validaLivrosDisponiveis()){
+//            listarLivrosDisponiveis();
+//            System.out.println();
+//            System.out.print("|Digite o ID do livro que você deseja: ");
+//            int idLivro = scan.nextInt();
+//            try{
+//                if(biblioteca.validaIdLivroDisponivel(idLivro)){
+//                    biblioteca.mudaEstadoLivroParaEmprestado(idLivro);
+//                } else{
+//                    throw new OpcaoInvalida("Este livro não existe ou não está disponível!");
+//                }
+//            }catch (OpcaoInvalida e){
+//                System.out.println(e.getMessage());
+//            }
+//        } else{
+//            System.out.println("Não há livros disponíveis para empréstimo!");
+//        }
+//    }
 
     public static void devolverLivro() throws OpcaoInvalida{
-        
+
     }
 }
