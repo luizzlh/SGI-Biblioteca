@@ -5,9 +5,9 @@ import exceptions.OpcaoInvalida;
 import mongodb.IniciaConexao;
 import mongodb.Login;
 import mongodb.VerificaConteudoBD;
-
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import aplicattion.PasswordHasher;
 
 public class Main {
     static Biblioteca biblioteca = new Biblioteca();
@@ -15,6 +15,10 @@ public class Main {
     static IniciaConexao connectDB = new IniciaConexao();
 
     public static void main(String[] args) {
+        start();
+    }
+
+    public static void start(){
         connectDB.iniciaConexao();
         System.out.println("-------------------------------------------------");
         System.out.println("|1 - Fazer Login");
@@ -64,8 +68,13 @@ public class Main {
                 System.out.println("Usuário logado com sucesso!");
                 int id = Login.retornaIdLogin(usuario, senha);
                 biblioteca.adicionaUsuarioLogado(id);
-                home();
-                return;
+                if(Login.verificaTipoUsuario(usuario, senha) == 0){
+                    homeCliente();
+                }else if(Login.verificaTipoUsuario(usuario, senha) == 1){
+                    homeAdmin();
+                } else{
+                    return;
+                }
             } else {
                 System.out.println("Usuário ou senha inválida! Tente novamente.");
                 System.out.print("| Digite seu usuário: ");
@@ -76,35 +85,48 @@ public class Main {
         }
     }
 
-    public static void cadastro() throws OpcaoInvalida {
-        scan.nextLine();
-        System.out.println("-------------------------------------------------");
-        System.out.print("Digite o nome do usuário: ");
-        String nome = scan.nextLine();
-        int idade;
-        try{
+    public static void cadastro() {
+        try {
+            System.out.println("-------------------------------------------------");
+            System.out.print("Digite o nome do usuário: ");
+            String nome = scan.nextLine();
+
+            if(nome.contains("admin")){
+                System.out.println("Nome inválido!");
+                System.out.print("Digite um nome de usuário válido: ");
+                nome = scan.nextLine();
+            }
+
             System.out.print("Digite a idade do usuário: ");
-            idade = scan.nextInt();
+            int idade = scan.nextInt();
             scan.nextLine();
-            if(idade < 18){
+
+            if (idade < 18) {
                 throw new OpcaoInvalida("O usuário não tem uma idade permitida!");
             }
-        } catch (OpcaoInvalida e){
+
+            System.out.print("Digite sua senha: ");
+            String senha = scan.nextLine();
+
+            Usuario user = new Usuario();
+            user.setNome(nome);
+            user.setIdade(idade);
+            user.setTipo("Cliente");
+            PasswordHasher PasswordHasher = null;
+            user.setSenha(PasswordHasher.hashPassword(senha));
+
+            biblioteca.adicionarUsuario(user);
+            start();
+
+        } catch (OpcaoInvalida e) {
             System.out.println(e.getMessage());
             return;
+        } catch (Exception e) {
+            System.out.println("Erro durante o cadastro: " + e.getMessage());
         }
-        System.out.print("Digite sua senha: ");
-        String senha = scan.nextLine();
-
-        Usuario user = new Usuario();
-        user.setNome(nome);
-        user.setIdade(idade);
-        user.setTipo("Cliente");
-        user.setSenha(senha);
-        biblioteca.adicionarUsuario(user);
     }
 
-    public static void home() throws OpcaoInvalida {
+    public static void homeAdmin() throws OpcaoInvalida {
         int opcao = 1;
         while(opcao != 3){
             System.out.println("-------------------------------------------------");
@@ -119,7 +141,7 @@ public class Main {
                 switch (escolha) {
                     case 1:
                         opcao = 1;
-                        gerirLivros();
+                        gerirLivrosCliente();
                         break;
                     case 2:
                         opcao = 2;
@@ -127,6 +149,7 @@ public class Main {
                         break;
                     case 3:
                         opcao = 3;
+                        start();
                         break;
                     default:
                         throw new OpcaoInvalida("Opção escolhida é inválida!");
@@ -138,7 +161,39 @@ public class Main {
         }
     }
 
-    public static void gerirLivros() throws OpcaoInvalida, LivroExistente {
+    public static void homeCliente() throws OpcaoInvalida {
+        int opcao = 1;
+        while(opcao != 2){
+            System.out.println("-------------------------------------------------");
+            System.out.println("|O que deseja fazer?");
+            System.out.println("|1 - Gerir livros.");
+            System.out.println("|2 - Sair");
+            System.out.print("|Digite uma opção: ");
+
+            int escolha = scan.nextInt();
+            try {
+                switch (escolha) {
+                    case 1:
+                        opcao = 1;
+                        gerirLivrosCliente();
+                        break;
+                    case 2:
+                        opcao = 2;
+                        System.out.println("Deslogando...");
+                        biblioteca.removeUsuarioLogado();
+                        start();
+                        break;
+                    default:
+                        throw new OpcaoInvalida("Opção escolhida é inválida!");
+                }
+            } catch (OpcaoInvalida | LivroExistente ex){
+                System.out.println("-------------------------------------------------");
+                System.out.println(ex.getMessage());
+            }
+        }
+    }
+
+    public static void gerirLivrosAdmin() throws OpcaoInvalida, LivroExistente {
         int opcao = 1;
         while (opcao != 4) {
             System.out.println("-------------------------------------------------");
@@ -177,6 +232,40 @@ public class Main {
                         throw new OpcaoInvalida("Opção escolhida é inválida!");
                 }
             } catch (OpcaoInvalida | LivroExistente e) {
+                System.out.println("-------------------------------------------------");
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    public static void gerirLivrosCliente() throws OpcaoInvalida, LivroExistente {
+        int opcao = 1;
+        while (opcao != 3) {
+            System.out.println("-------------------------------------------------");
+            System.out.println("|O que deseja fazer?");
+            System.out.println("|1 - Ver livros");
+            System.out.println("|2 - Emprestar livro");
+            System.out.println("|3 - Sair");
+            System.out.print("|Digite sua escolha: ");
+
+            int escolha = scan.nextInt();
+            try {
+                switch (escolha) {
+                    case 1:
+                        opcao = 1;
+                        listarLivros();
+                        break;
+                    case 2:
+                        opcao = 2;
+//                        emprestarLivro();
+                        break;
+                    case 3:
+                        opcao = 3;
+                        return;
+                    default:
+                        throw new OpcaoInvalida("Opção escolhida é inválida!");
+                }
+            } catch (OpcaoInvalida e) {
                 System.out.println("-------------------------------------------------");
                 System.out.println(e.getMessage());
             }

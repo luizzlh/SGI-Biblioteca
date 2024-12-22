@@ -14,7 +14,7 @@ public class InsereDadosUsuario {
 
             Document doc = new Document("Nome", user.getNome())
                     .append("Idade", user.getIdade())
-                    .append("Tipo", "Cliente")
+                    .append("Tipo", user.getTipo())
                     .append("ID", user.getId())
                     .append("Senha", user.getSenha());
             collection.insertOne(doc);

@@ -1,19 +1,22 @@
 package mongodb;
+
+import aplicattion.PasswordHasher;
 import com.mongodb.client.*;
 import org.bson.Document;
 
 public class Login {
+
     public static boolean login(String usuario, String senha) {
         try (MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017")) {
             MongoDatabase database = mongoClient.getDatabase("admin");
-            MongoCollection<Document> collectionAdmin = database.getCollection("admins");
             MongoCollection<Document> collectionClientes = database.getCollection("clientes");
 
-            Document query = new Document("Nome", usuario)
-                    .append("Senha", senha);
+            Document userCliente = collectionClientes.find(new Document("Nome", usuario)).first();
 
-            return collectionAdmin.find(query).iterator().hasNext() ||
-                    collectionClientes.find(query).iterator().hasNext();
+            if (userCliente != null && validarSenha(senha, userCliente.getString("Senha"))) {
+                return true;
+            }
+            return false;
         } catch (Exception e) {
             System.err.println("Erro ao realizar login: " + e.getMessage());
             return false;
@@ -23,18 +26,40 @@ public class Login {
     public static int retornaIdLogin(String usuario, String senha) {
         try (MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017")) {
             MongoDatabase database = mongoClient.getDatabase("admin");
-            MongoCollection<Document> collection = database.getCollection("clientes");
-            MongoIterable<Document> documentos = collection.find();
+            MongoCollection<Document> collectionClientes = database.getCollection("clientes");
 
-            Document query = new Document("Nome", usuario)
-                    .append("Senha", senha);
+            Document userCliente = collectionClientes.find(new Document("Nome", usuario)).first();
 
-            for (Document documento : documentos) {
-                String nome = (String) documento.get("Nome");
-                if (nome.equals(usuario)) {
-                    return documento.get("ID");
+            if (userCliente != null && validarSenha(senha, userCliente.getString("Senha"))) {
+                return userCliente.getInteger("ID");
+            }
+            return -1;
+        } catch (Exception e) {
+            System.err.println("Erro ao recuperar ID do login: " + e.getMessage());
+            return -1;
+        }
+    }
+
+    private static boolean validarSenha(String senha, String senhaHashArmazenada) {
+        String senhaHash = PasswordHasher.hashPassword(senha);
+        return senhaHash.equals(senhaHashArmazenada);
+    }
+
+    public static int verificaTipoUsuario(String usuario, String senha){
+        try (MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017")) {
+            MongoDatabase database = mongoClient.getDatabase("admin");
+            MongoCollection<Document> collectionClientes = database.getCollection("clientes");
+
+            Document userCliente = collectionClientes.find(new Document("Nome", usuario)).first();
+
+            if (userCliente != null && validarSenha(senha, userCliente.getString("Senha"))) {
+                if(userCliente.getString("Tipo").equalsIgnoreCase("Adm")){
+                    return 1;
                 }
             }
+            return 0;
+        } catch (Exception e) {
+            System.err.println("Erro ao recuperar ID do login: " + e.getMessage());
             return -1;
         }
     }
