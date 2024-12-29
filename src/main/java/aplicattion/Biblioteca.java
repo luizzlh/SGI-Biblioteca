@@ -44,48 +44,24 @@ public class Biblioteca implements Listagem {
     }
 
     public boolean validaLivrosDisponiveis(){
-        for(Livro livro: listaGeralLivros){
-            if(livro.getEstado().equalsIgnoreCase("Disponível")){
-                livrosDisponiveis.add(livro);
-            }
-        }
-
-        if(listaGeralLivros.isEmpty()){
-            return true;
-        }
-        return false;
+        return EmprestaLivro.verificarLivrosDisponiveis();
     }
 
     public void removeLivro(int isbn){
         RemoveLivro.removeLivro(isbn);
     }
 
-//    public void mudaEstadoLivroParaEmprestado(int id){
-//        for(Livro livro: livrosDisponiveis){
-//            if(livro.getId() == id){
-//                livro.setEstado("Emprestado");
-//                livrosDisponiveis.remove(livro);
-//            }
-//        }
-//    }
+    public void mudaEstadoLivroParaEmprestado(int isbn){
+        EmprestaLivro.mudarEstadoLivroParaEmprestado(isbn);
+    }
 
-//    public void mudaEstadoLivroParaDisponivel(int id){
-//        for(Livro livro: listaGeralLivros){
-//            if(livro.getId() == id){
-//                livro.setEstado("Disponível");
-//                livrosDisponiveis.add(livro);
-//            }
-//        }
-//    }
+    public void mudaEstadoLivroParaDisponivel(int isbn){
+        EmprestaLivro.mudarEstadoLivroParaDisponivel(isbn);
+    }
 
-//    public boolean validarIdLivroDisponivel(int id){
-//        for(Livro livro: listaGeralLivros){
-//            if(livro.getId() == id){
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
+    public boolean validarIdLivroDisponivel(int isbn){
+        return EmprestaLivro.validaLivro(isbn);
+    }
 
     public void removerLivro(int isbn){
         RemoveLivro.removeLivro(isbn);

@@ -7,7 +7,6 @@ import mongodb.Login;
 import mongodb.VerificaConteudoBD;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import aplicattion.PasswordHasher;
 
 public class Main {
     static Biblioteca biblioteca = new Biblioteca();
@@ -141,7 +140,7 @@ public class Main {
                 switch (escolha) {
                     case 1:
                         opcao = 1;
-                        gerirLivrosCliente();
+                        gerirLivrosAdmin();
                         break;
                     case 2:
                         opcao = 2;
@@ -223,7 +222,7 @@ public class Main {
                         break;
                     case 4:
                         opcao = 4;
-//                        emprestarLivro();
+                        emprestarLivro();
                         break;
                     case 5:
                         opcao = 5;
@@ -257,7 +256,7 @@ public class Main {
                         break;
                     case 2:
                         opcao = 2;
-//                        emprestarLivro();
+                        emprestarLivro();
                         break;
                     case 3:
                         opcao = 3;
@@ -394,26 +393,26 @@ public class Main {
         }
     }
 
-//    public static void emprestarLivro() throws OpcaoInvalida {
-//        System.out.println("-------------------------------------------------");
-//        if(!biblioteca.validaLivrosDisponiveis()){
-//            listarLivrosDisponiveis();
-//            System.out.println();
-//            System.out.print("|Digite o ID do livro que você deseja: ");
-//            int idLivro = scan.nextInt();
-//            try{
-//                if(biblioteca.validaIdLivroDisponivel(idLivro)){
-//                    biblioteca.mudaEstadoLivroParaEmprestado(idLivro);
-//                } else{
-//                    throw new OpcaoInvalida("Este livro não existe ou não está disponível!");
-//                }
-//            }catch (OpcaoInvalida e){
-//                System.out.println(e.getMessage());
-//            }
-//        } else{
-//            System.out.println("Não há livros disponíveis para empréstimo!");
-//        }
-//    }
+    public static void emprestarLivro() throws OpcaoInvalida {
+        System.out.println("-------------------------------------------------");
+        if(biblioteca.validaLivrosDisponiveis()){
+            listarLivrosDisponiveis();
+            System.out.println();
+            System.out.print("|Digite o ISBN do livro que você deseja: ");
+            int isbnLivro = scan.nextInt();
+            try{
+                if(biblioteca.validarIdLivroDisponivel(isbnLivro)){
+                    biblioteca.mudaEstadoLivroParaEmprestado(isbnLivro);
+                } else{
+                    throw new OpcaoInvalida("Este livro não existe ou não está disponível!");
+                }
+            }catch (OpcaoInvalida e){
+                System.out.println(e.getMessage());
+            }
+        } else{
+            System.out.println("Não há livros disponíveis para empréstimo!");
+        }
+    }
 
     public static void devolverLivro() throws OpcaoInvalida{
 
