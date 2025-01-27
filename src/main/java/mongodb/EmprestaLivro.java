@@ -46,7 +46,7 @@ public class EmprestaLivro {
         }
     }
 
-    public static void mudarEstadoLivroParaEmprestado(int isbn){
+    public static void mudarEstadoLivroParaEmprestado(int isbn, int idUser){
         try (MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017")) {
             MongoDatabase database = mongoClient.getDatabase("catalogo");
             MongoCollection<Document> collection = database.getCollection("livros");
@@ -68,6 +68,8 @@ public class EmprestaLivro {
                                 .append("Autor", documento.get("Autor"))
                                 .append("Estado", documento.get("Estado"))
                                 .append("ISBN", documento.get("ISBN"));
+
+                        InsereDadosUsuario.insereLivroUsuario(idUser, livro);
 
                     }
                 }

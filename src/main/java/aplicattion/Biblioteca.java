@@ -52,7 +52,7 @@ public class Biblioteca implements Listagem {
     }
 
     public void mudaEstadoLivroParaEmprestado(int isbn){
-        EmprestaLivro.mudarEstadoLivroParaEmprestado(isbn);
+        EmprestaLivro.mudarEstadoLivroParaEmprestado(isbn, idUsuarioLogado);
     }
 
     public void mudaEstadoLivroParaDisponivel(int isbn){
